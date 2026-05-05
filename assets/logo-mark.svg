@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Fundo circular cream -->
+  <circle cx="100" cy="100" r="100" fill="#F5F1E8"/>
+
+  <!-- SACOLINHA estilo camiseta (com furos nas alças) -->
+  <g fill="#2A5238">
+    <!-- Corpo principal (trapezoidal mais largo embaixo) -->
+    <path d="M 56 70
+             L 144 70
+             L 152 88
+             L 148 158
+             Q 147 164 141 164
+             L 59 164
+             Q 53 164 52 158
+             L 48 88
+             Z"/>
+
+    <!-- Alça esquerda (formato camiseta com FURO) -->
+    <path fill-rule="evenodd" d="
+      M 60 70
+      L 60 56
+      Q 60 40 78 40
+      Q 96 40 96 56
+      L 96 70
+      L 88 70
+      L 88 60
+      Q 88 50 78 50
+      Q 68 50 68 60
+      L 68 70
+      Z"/>
+
+    <!-- Alça direita (formato camiseta com FURO) -->
+    <path fill-rule="evenodd" d="
+      M 140 70
+      L 140 56
+      Q 140 40 122 40
+      Q 104 40 104 56
+      L 104 70
+      L 112 70
+      L 112 60
+      Q 112 50 122 50
+      Q 132 50 132 60
+      L 132 70
+      Z"/>
+  </g>
+
+  <!-- SÍMBOLO DE RECICLAGEM CLÁSSICO — 3 setas em loop (cream sobre verde) -->
+  <g transform="translate(100 122)" fill="#F5F1E8">
+    <!-- Seta 1 — apontando pra direita-cima -->
+    <g transform="rotate(0)">
+      <path d="
+        M 0 -28
+        L 11 -10
+        L 5 -10
+        L 5 -2
+        Q 5 0 3 0
+        L -3 0
+        Q -5 0 -5 -2
+        L -5 -10
+        L -11 -10
+        Z"/>
+    </g>
+    <!-- Seta 2 -->
+    <g transform="rotate(120)">
+      <path d="
+        M 0 -28
+        L 11 -10
+        L 5 -10
+        L 5 -2
+        Q 5 0 3 0
+        L -3 0
+        Q -5 0 -5 -2
+        L -5 -10
+        L -11 -10
+        Z"/>
+    </g>
+    <!-- Seta 3 -->
+    <g transform="rotate(240)">
+      <path d="
+        M 0 -28
+        L 11 -10
+        L 5 -10
+        L 5 -2
+        Q 5 0 3 0
+        L -3 0
+        Q -5 0 -5 -2
+        L -5 -10
+        L -11 -10
+        Z"/>
+    </g>
+  </g>
+</svg>
