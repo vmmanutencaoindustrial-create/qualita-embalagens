@@ -224,16 +224,65 @@
             <text class="morph-label" x="200" y="365">Granulado · extrusão</text>
           </g>
 
-          <!-- STAGE 3: Sacola Qualità REAL (PNG) -->
+          <!-- STAGE 3: Sacola desenhada em traços dourados + logo Qualità -->
           <g class="morph-stage" data-step="3">
-            <!-- Halo dourado por trás pra dar destaque cinematográfico -->
-            <ellipse class="morph-halo" cx="200" cy="220" rx="130" ry="170"
-                     fill="rgba(232,185,49,.16)" filter="blur(8px)"/>
-            <!-- A sacola real -->
-            <image class="morph-bag-real" href="assets/sacola-mascote.png"
-                   x="80" y="55" width="240" height="320"
-                   preserveAspectRatio="xMidYMid meet"/>
-            <text class="morph-label" x="200" y="395">Embalagem Qualità · pronta</text>
+            <!-- Bag body -->
+            <path class="morph-shape morph-draw morph-fill" d="M 125 130
+              L 125 320
+              Q 125 335 140 335
+              L 260 335
+              Q 275 335 275 320
+              L 275 130 Z"/>
+            <!-- Bag handles (camiseta) -->
+            <path class="morph-shape morph-draw" d="M 155 130
+              L 155 90 Q 155 75 170 75
+              L 190 75 Q 200 75 200 90
+              L 200 130"/>
+            <path class="morph-shape morph-draw" d="M 200 130
+              L 200 90 Q 200 75 210 75
+              L 230 75 Q 245 75 245 90
+              L 245 130"/>
+
+            <!-- Logo Qualità dentro da sacola: símbolo de reciclagem + texto -->
+            <g class="morph-logo">
+              <!-- Símbolo de reciclagem (3 setas em triângulo) -->
+              <g transform="translate(165, 175)" class="morph-shape">
+                <!-- Seta superior -->
+                <path d="M 15 8 L 22 0 L 29 8 L 25 8 L 25 16 L 19 16 L 19 8 Z"
+                      fill="rgba(232,185,49,.85)"/>
+                <!-- Seta inferior-esquerda -->
+                <path d="M 0 32 L 4 24 L 12 28 L 10 30 L 14 38 L 8 41 L 4 33 Z"
+                      fill="rgba(232,185,49,.85)"/>
+                <!-- Seta inferior-direita -->
+                <path d="M 44 32 L 40 24 L 32 28 L 34 30 L 30 38 L 36 41 L 40 33 Z"
+                      fill="rgba(232,185,49,.85)"/>
+                <!-- Conectores entre setas (formato triangular) -->
+                <path d="M 22 4 L 12 22 L 32 22 Z"
+                      fill="none" stroke="rgba(232,185,49,.55)" stroke-width="1.5"/>
+              </g>
+
+              <!-- Texto Qualità em dourado -->
+              <text class="morph-wordmark" x="200" y="252"
+                    text-anchor="middle"
+                    font-family="'Bricolage Grotesque', sans-serif"
+                    font-size="32" font-weight="700"
+                    fill="rgba(232,185,49,.92)"
+                    letter-spacing="-.5">Qualità</text>
+
+              <!-- Underline sutil -->
+              <line x1="155" y1="270" x2="245" y2="270"
+                    stroke="rgba(232,185,49,.45)" stroke-width="1"/>
+
+              <!-- Tagline pequena -->
+              <text class="morph-tagline" x="200" y="290"
+                    text-anchor="middle"
+                    font-family="monospace"
+                    font-size="7"
+                    letter-spacing="2"
+                    fill="rgba(232,185,49,.6)">RECICLE · TRANSFORME · IMPACTE</text>
+            </g>
+
+            <text class="morph-label" x="200" y="385">Embalagem Qualità · pronta</text>
           </g>
         </svg>
       `;

@@ -323,37 +323,23 @@
   stroke-dashoffset: 0;
 }
 
-/* Stage 3 — sacola real Qualità + halo dourado */
-.process__morph .morph-bag-real {
+/* Stage 3 — logo Qualità dentro da sacola */
+.process__morph .morph-logo {
   opacity: 0;
-  transform: translateY(20px);
-  transform-origin: center;
-  transform-box: fill-box;
-  transition: opacity 1.2s var(--ease-out), transform 1.2s var(--ease-out);
-  filter: drop-shadow(0 18px 30px rgba(0,0,0,.55));
+  transition: opacity 1s var(--ease-out) .4s;
 }
-.morph-stage.is-active .morph-bag-real {
+.morph-stage.is-active .morph-logo {
   opacity: 1;
-  transform: translateY(0);
-  animation: bagBreath 5s ease-in-out infinite 1.4s;
 }
-@keyframes bagBreath {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-4px); }
+.process__morph .morph-wordmark {
+  font-variation-settings: 'opsz' 96, 'wght' 700;
 }
-.process__morph .morph-halo {
+.process__morph .morph-tagline {
   opacity: 0;
-  transform-origin: center;
-  transform-box: fill-box;
-  transition: opacity 1.4s var(--ease-out);
+  transition: opacity 1s var(--ease-out) 1.2s;
 }
-.morph-stage.is-active .morph-halo {
+.morph-stage.is-active .morph-tagline {
   opacity: 1;
-  animation: haloPulse 4s ease-in-out infinite;
-}
-@keyframes haloPulse {
-  0%, 100% { transform: scale(1);   }
-  50%      { transform: scale(1.06);}
 }
 
 /* Make the sticky media a stage with darker bg for morph */
