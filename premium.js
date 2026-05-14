@@ -666,6 +666,143 @@
     updateZoom();
   }
 
+  /* ============== P1#5 — VARIABLE FONT SCROLL-DRIVEN ============== */
+  const heroTitle = document.querySelector('.hero__title');
+  if (heroTitle && !reduced) {
+    let rafW;
+    function updateWght() {
+      const r = heroTitle.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // 0 quando topo acima da viewport, 1 quando topo no fim viewport
+      const p = Math.min(Math.max(1 - (r.top / vh), 0), 1.5);
+      // wght: 400 → 800 → 600 (curva swooping)
+      const wght = 400 + Math.sin(p * Math.PI) * 400;
+      document.documentElement.style.setProperty('--wght', Math.round(wght));
+      rafW = null;
+    }
+    window.addEventListener('scroll', () => {
+      if (rafW) return;
+      rafW = requestAnimationFrame(updateWght);
+    }, { passive: true });
+    updateWght();
+  }
+
+  /* ============== P1#9 — NAV INDICATOR LATERAL ============== */
+  const sideNav = document.getElementById('sideNav');
+  if (sideNav) {
+    const sections = [
+      { id: 'hero',             label: 'Hero',         dark: true },
+      { id: 'manifesto',        label: 'Manifesto',    dark: false },
+      { id: 'zoom-in',          label: 'Por dentro',   dark: true },
+      { id: 'processo',         label: 'Processo',     dark: true },
+      { id: 'produtos',         label: 'Produtos',     dark: false },
+      { id: 'decreto',          label: 'Decreto 2026', dark: true },
+      { id: 'diferenciais',     label: 'Diferenciais', dark: false },
+      { id: 'sustentabilidade', label: 'Impacto',      dark: false },
+      { id: 'contato',          label: 'Contato',      dark: false }
+    ];
+    const dotMap = new Map();
+    sections.forEach(s => {
+      const el = document.getElementById(s.id);
+      if (!el) return;
+      const dot = document.createElement('a');
+      dot.className = 'side-nav__dot';
+      dot.href = '#' + s.id;
+      dot.dataset.label = s.label;
+      dot.dataset.section = s.id;
+      dot.dataset.dark = s.dark;
+      sideNav.appendChild(dot);
+      dotMap.set(s.id, dot);
+    });
+
+    const navIo = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const dot = dotMap.get(e.target.id);
+          if (!dot) return;
+          dotMap.forEach(d => d.classList.remove('is-active'));
+          dot.classList.add('is-active');
+          // switch dark/light side nav style
+          if (dot.dataset.dark === 'true') sideNav.classList.add('on-dark');
+          else sideNav.classList.remove('on-dark');
+        }
+      });
+    }, { rootMargin: '-40% 0px -40% 0px' });
+    sections.forEach(s => {
+      const el = document.getElementById(s.id);
+      if (el) navIo.observe(el);
+    });
+  }
+
+  /* ============== P2#11 — SOUND TOGGLE ============== */
+  const soundBtn = document.getElementById('soundToggle');
+  if (soundBtn) {
+    let audioCtx = null;
+    let soundOn = false;
+
+    function ensureCtx() {
+      if (!audioCtx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (AC) audioCtx = new AC();
+      }
+      return audioCtx;
+    }
+    function beep(freq, dur, type='sine', gain=.05) {
+      if (!soundOn) return;
+      const ctx = ensureCtx();
+      if (!ctx) return;
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = type;
+      o.frequency.value = freq;
+      g.gain.value = gain;
+      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
+      o.connect(g); g.connect(ctx.destination);
+      o.start();
+      o.stop(ctx.currentTime + dur);
+    }
+
+    soundBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      soundOn = !soundOn;
+      soundBtn.classList.toggle('is-on', soundOn);
+      soundBtn.setAttribute('aria-label', soundOn ? 'Desativar som' : 'Ativar som');
+      if (soundOn) {
+        ensureCtx();
+        beep(523, .12, 'sine', .08); // click confirma
+      }
+    });
+
+    // Tick em hover de elementos interativos
+    document.querySelectorAll('a, button, [data-magnetic], [data-tilt]').forEach(el => {
+      el.addEventListener('mouseenter', () => beep(880, .04, 'triangle', .02));
+    });
+    // Thunk no click em botões
+    document.querySelectorAll('button, .btn, [data-magnetic]').forEach(el => {
+      el.addEventListener('click', () => beep(220, .15, 'sine', .04));
+    });
+  }
+
+  /* ============== P2#12 — ANCHOR PAGE TRANSITIONS (fade-blur curto) ============== */
+  const pageFade = document.getElementById('pageFade');
+  if (pageFade) {
+    document.querySelectorAll('a[href^="#"]:not(.side-nav__dot)').forEach(a => {
+      a.addEventListener('click', (e) => {
+        const id = a.getAttribute('href');
+        if (id.length <= 1) return;
+        const target = document.querySelector(id);
+        if (!target) return;
+        e.preventDefault();
+        pageFade.classList.add('is-flashing');
+        setTimeout(() => {
+          const top = target.getBoundingClientRect().top + window.scrollY - 60;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }, 180);
+        setTimeout(() => pageFade.classList.remove('is-flashing'), 700);
+      });
+    });
+  }
+
   /* ============== CONSOLE BANNER PREMIUM ============== */
   console.log('%c Qualità · Premium Layer 2026 ', 'background:#B8841E;color:#1F4530;padding:8px 14px;font-family:monospace;font-weight:bold;letter-spacing:.1em;');
 })();

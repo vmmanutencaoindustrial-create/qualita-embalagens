@@ -90,16 +90,21 @@
 </head>
 <body>
 
-<!-- ===== LOADER ===== -->
+<!-- ===== LOADER v2 — text mask reveal + bar ===== -->
 <div class="loader" id="loader" aria-hidden="true">
   <div class="loader__inner">
-    <svg class="loader__mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="2" opacity=".15"/>
-      <path d="M30 50 L45 65 L72 35" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="loader__check"/>
-    </svg>
-    <span class="loader__label">Qualità</span>
+    <div class="loader__brand" aria-label="Qualità">
+      <span class="loader__brand-char" style="animation-delay:0s">Q</span><span class="loader__brand-char" style="animation-delay:.05s">u</span><span class="loader__brand-char" style="animation-delay:.1s">a</span><span class="loader__brand-char" style="animation-delay:.15s">l</span><span class="loader__brand-char" style="animation-delay:.2s">i</span><span class="loader__brand-char" style="animation-delay:.25s">t</span><span class="loader__brand-char" style="animation-delay:.3s">à</span>
+    </div>
+    <div class="loader__words">
+      <span>Recicle</span><span class="sep">·</span><span>Transforme</span><span class="sep">·</span><span>Impacte</span>
+    </div>
+    <div class="loader__bar"><div class="loader__bar-fill"></div></div>
   </div>
 </div>
+
+<!-- Page fade overlay para anchor transitions -->
+<div class="page-fade" id="pageFade" aria-hidden="true"></div>
 
 <!-- ===== SCROLL PROGRESS ===== -->
 <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress__bar" id="scrollBar"></div></div>
@@ -139,6 +144,14 @@
     <div class="hero__mesh--accent" aria-hidden="true"></div>
     <div class="hero__grain"></div>
     <div class="hero__overlay"></div>
+  </div>
+
+  <div class="hero__ghost-bags" aria-hidden="true">
+    <span class="ghost ghost--a"></span>
+    <span class="ghost ghost--b"></span>
+    <span class="ghost ghost--c"></span>
+    <span class="ghost ghost--d"></span>
+    <span class="ghost ghost--e"></span>
   </div>
 
   <div class="hero__content">
@@ -817,6 +830,23 @@
     <small>Build 2026.05</small>
   </div>
 </footer>
+
+<!-- Nav indicator lateral (P1#9) -->
+<nav class="side-nav" id="sideNav" aria-label="Navegação rápida"></nav>
+
+<!-- Sound toggle (P2#11) -->
+<button class="sound-toggle" id="soundToggle" aria-label="Ativar som">
+  <svg class="icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+    <line x1="23" y1="9" x2="17" y2="15"/>
+    <line x1="17" y1="9" x2="23" y2="15"/>
+  </svg>
+  <svg class="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+    <path d="M15.54 8.46a5 5 0 010 7.07"/>
+    <path d="M19.07 4.93a10 10 0 010 14.14"/>
+  </svg>
+</button>
 
 <script src="script.js"></script>
 <script src="premium.js"></script>
