@@ -1120,6 +1120,10 @@
 .quote blockquote {
   position: relative;
 }
+.quote-word {
+  display: inline-block;
+  white-space: nowrap;
+}
 .quote-char {
   display: inline-block;
   opacity: 0;

@@ -14,7 +14,8 @@
 <meta property="og:locale" content="pt_BR" />
 <meta property="og:title" content="Qualità Embalagens Plásticas — Atacado com responsabilidade ♻️" />
 <meta property="og:description" content="Transformamos plástico reciclado em embalagens sustentáveis. Sacos de lixo, sacolas personalizadas e bobinas. Atendemos todo Brasil." />
-<meta property="og:image" content="assets/og-image.svg" />
+<meta property="og:image" content="https://qualita.com.br/assets/og-image.png" />
+<meta property="og:image:type" content="image/png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="Qualità Embalagens Plásticas — recicle. transforme. impacte." />
@@ -42,8 +43,8 @@
 <!-- Tipografia: Bricolage Grotesque (display unificado com logo) + Inter (UI) + JetBrains Mono (dados) -->
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 
-<link rel="stylesheet" href="styles.css?v=16" />
-<link rel="stylesheet" href="premium.css?v=16" />
+<link rel="stylesheet" href="styles.css?v=17" />
+<link rel="stylesheet" href="premium.css?v=17" />
 
 <!-- Three.js para a sacola 3D do Hero -->
 <script type="importmap">
@@ -932,9 +933,21 @@
   </svg>
 </button>
 
-<script src="script.js?v=16"></script>
-<script src="premium.js?v=16"></script>
-<script type="module" src="hero-3d.js?v=16"></script>
-<script type="module" src="ecosystem-3d.js?v=16"></script>
+<script src="script.js?v=17"></script>
+<script src="premium.js?v=17"></script>
+<!-- 3D modules carregam só em desktop (skip mobile pra performance) -->
+<script type="module">
+  const isMobile = window.matchMedia('(max-width: 1100px)').matches
+    || window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    || window.matchMedia('(pointer: coarse)').matches;
+  if (!isMobile) {
+    const h = document.createElement('script');
+    h.type = 'module'; h.src = 'hero-3d.js?v=17';
+    document.body.appendChild(h);
+    const e = document.createElement('script');
+    e.type = 'module'; e.src = 'ecosystem-3d.js?v=17';
+    document.body.appendChild(e);
+  }
+</script>
 </body>
 </html>

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /.claude/
+Disallow: /assets/sacola-mascote-raw.png
+
+Sitemap: https://qualita.com.br/sitemap.xml

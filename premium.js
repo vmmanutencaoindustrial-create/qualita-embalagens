@@ -427,23 +427,33 @@
   /* ============== QUOTE — char split + reveal stagger ============== */
   const quoteEl = document.querySelector('.quote blockquote');
   if (quoteEl) {
-    // wrap each word in a span containing chars
-    const html = quoteEl.innerHTML;
-    // Walk text nodes only — preserve <em> tags
+    // Walk text nodes — wrap WORDS (não chars) pra evitar quebra interna no mobile.
+    // Cada palavra é um .quote-word inline-block; chars dentro têm anim individual mas
+    // a palavra inteira fica unbreakable.
     function processNode(node) {
       if (node.nodeType === Node.TEXT_NODE) {
         const text = node.textContent;
         const frag = document.createDocumentFragment();
-        [...text].forEach((c, i) => {
-          if (c === ' ') {
-            frag.appendChild(document.createTextNode(' '));
-          } else {
+        // Split em palavras + espaços/pontuação
+        const tokens = text.split(/(\s+)/);
+        tokens.forEach(token => {
+          if (token === '') return;
+          if (/^\s+$/.test(token)) {
+            // espaço puro: text node simples (permite wrap)
+            frag.appendChild(document.createTextNode(token));
+            return;
+          }
+          // palavra: wrap em .quote-word com chars dentro
+          const word = document.createElement('span');
+          word.className = 'quote-word';
+          [...token].forEach((c, i) => {
             const span = document.createElement('span');
             span.className = 'quote-char';
             span.textContent = c;
             span.style.transitionDelay = (Math.random() * 0.6) + 's';
-            frag.appendChild(span);
-          }
+            word.appendChild(span);
+          });
+          frag.appendChild(word);
         });
         node.replaceWith(frag);
       } else if (node.nodeType === Node.ELEMENT_NODE) {
