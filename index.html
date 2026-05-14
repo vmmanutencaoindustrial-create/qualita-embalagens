@@ -45,6 +45,15 @@
 <link rel="stylesheet" href="styles.css" />
 <link rel="stylesheet" href="premium.css" />
 
+<!-- Three.js para a sacola 3D do Hero -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+  }
+}
+</script>
+
 <!-- Google Analytics 4 — descomente e troque G-XXXXXXXXXX pelo Measurement ID quando criar a conta GA4
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
 <script>
@@ -152,6 +161,11 @@
     <span class="ghost ghost--c"></span>
     <span class="ghost ghost--d"></span>
     <span class="ghost ghost--e"></span>
+  </div>
+
+  <!-- Sacola 3D WebGL — Three.js inicializado em hero-3d.js -->
+  <div class="hero__3d-wrap" aria-hidden="true">
+    <canvas class="hero__3d" id="hero3d"></canvas>
   </div>
 
   <div class="hero__content">
@@ -850,5 +864,6 @@
 
 <script src="script.js"></script>
 <script src="premium.js"></script>
+<script type="module" src="hero-3d.js"></script>
 </body>
 </html>
