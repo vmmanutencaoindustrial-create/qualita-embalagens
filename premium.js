@@ -398,18 +398,22 @@
     const bubbleText = bubble && bubble.querySelector('.bag-companion__bubble-text');
 
     const states = {
-      hero:              { fall: false, msg: null },
-      marquee:           { fall: false, msg: null,                              hide: true },
-      manifesto:         { fall: false, msg: 'Eu era resíduo. Agora circulo.' },
-      processo:          { fall: false, msg: null,                              hide: true },
-      stats:             { fall: false, msg: '100% pós-consumo ✓' },
-      produtos:          { fall: false, msg: 'Linha de 4 — escolhe a sua',      side: 'left' },
-      decreto:           { fall: false, msg: '22% obrigatório · 2026 ✓' },
-      diferenciais:      { fall: false, msg: 'Atendo Brasil todo',              side: 'left' },
-      sustentabilidade:  { fall: false, msg: 'Uma garrafa a menos no oceano 🌊' },
-      contato:           { fall: false, msg: 'Manda mensagem aí 👋',            side: 'left' },
-      footer:            { fall: true,  msg: null }
+      hero:              { msg: 'Oi! Sou 100% reciclada ✨',     flip: null },
+      marquee:           { msg: null,                            hide: true, flip: 'r1' },
+      manifesto:         { msg: 'Eu era resíduo. Agora circulo.', flip: 'r2' },
+      processo:          { msg: null,                            hide: true, flip: 'r1' },
+      stats:             { msg: '100% pós-consumo ✓',            flip: 'tilt' },
+      produtos:          { msg: 'Linha de 4 — escolhe a sua',    flip: 'r1' },
+      decreto:           { msg: '22% obrigatório · 2026 ✓',      flip: 'r2' },
+      diferenciais:      { msg: 'Atendo Brasil todo',            side: 'left', flip: 'up' },
+      sustentabilidade:  { msg: 'Uma garrafa a menos no oceano 🌊', flip: 'r2' },
+      contato:           { msg: 'Manda mensagem aí 👋',          side: 'left', flip: 'r3' },
+      footer:            { msg: null,                            fall: true, flip: null }
     };
+
+    // Cycle through flip types to keep it interesting if the user revisits the same section
+    const flipCycle = ['r1', 'r2', 'tilt', 'up', 'r3'];
+    let flipIdx = 0;
 
     // Section order (for first-pass and unknown detection)
     const order = Object.keys(states);
@@ -418,13 +422,15 @@
     let currentState = null;
     function applyState(name) {
       if (!states[name] || name === currentState) return;
+      const previous = currentState;
       currentState = name;
       // remove old states
       order.forEach(s => bag.classList.remove('bag-state-' + s));
       bag.classList.add('bag-state-' + name);
 
-      // visibility
       const cfg = states[name];
+
+      // Visibility
       if (cfg.hide) {
         bag.classList.remove('is-visible');
         bag.classList.remove('has-bubble');
@@ -432,16 +438,26 @@
         bag.classList.add('is-visible');
       }
 
-      // side
+      // Side
       bag.classList.toggle('is-left', cfg.side === 'left');
 
-      // bubble message
+      // 3D flip — sequencia: 1) gira a sacola da frente, 2) revela a de trás, 3) volta ao default
+      // Pra ficar dinâmico, faz o flip rápido e depois recompõe na posição final
+      if (previous !== null) {
+        const flipKind = cfg.flip || flipCycle[flipIdx++ % flipCycle.length];
+        bag.setAttribute('data-flip', flipKind);
+        // 850ms depois volta ao default (sacola da frente alinhada de novo)
+        setTimeout(() => {
+          if (currentState === name) bag.removeAttribute('data-flip');
+        }, 850);
+      }
+
+      // Bubble
       if (cfg.msg && bubbleText) {
         bubbleText.textContent = cfg.msg;
-        // delay a tick so bubble fades after the bag moves
         setTimeout(() => {
           if (currentState === name && !cfg.hide) bag.classList.add('has-bubble');
-        }, 350);
+        }, 450);
       } else {
         bag.classList.remove('has-bubble');
       }

@@ -503,84 +503,112 @@
 .section-eyebrow.is-in::before { width: 42px; }
 
 /* =====================================================================
-   BAG COMPANION — sacola mascote que percorre o site inteiro
+   BAG COMPANION — sacola mascote real (PNG) com 3D + sacola de trás
    ===================================================================== */
 .bag-companion {
   position: fixed;
   z-index: 80;
   pointer-events: none;
-  width: 90px;
-  height: 130px;
+  width: 110px;
+  height: 156px;
   opacity: 0;
   transform: translate3d(0, 40px, 0);
   transition:
-    transform .9s var(--ease-soft),
     opacity .6s var(--ease-out),
-    top .9s var(--ease-soft),
-    left .9s var(--ease-soft),
-    right .9s var(--ease-soft),
-    bottom .9s var(--ease-soft);
-  /* default position — bottom-right */
+    top 1.1s var(--ease-soft),
+    left 1.1s var(--ease-soft),
+    right 1.1s var(--ease-soft),
+    bottom 1.1s var(--ease-soft),
+    transform 1.1s var(--ease-soft);
+  /* default — bottom-right */
   right: 2.5vw;
   bottom: 6vh;
-  filter: drop-shadow(0 10px 25px rgba(15, 31, 21, .35));
+  perspective: 700px;
+  perspective-origin: 50% 40%;
 }
 .bag-companion.is-visible {
   opacity: 1;
   transform: translate3d(0, 0, 0);
 }
-.bag-companion__inner {
+
+.bag-companion__stage {
   position: relative;
-  width: 100%; height: 100%;
-  animation: bagSway 4s ease-in-out infinite;
-  transform-origin: 50% 18%;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  animation: bagSway 4.4s ease-in-out infinite;
+  transform-origin: 50% 20%;
   will-change: transform;
 }
 @keyframes bagSway {
-  0%, 100% { transform: rotate(-2.5deg); }
-  50%      { transform: rotate(2.5deg); }
+  0%, 100% { transform: rotate(-3deg); }
+  50%      { transform: rotate(3deg); }
 }
-.bag-companion__svg {
-  width: 100%; height: 100%;
-  display: block;
+
+.bag-companion__bag {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+  transition: transform 1.2s var(--ease-soft);
+  will-change: transform;
+  filter: drop-shadow(0 14px 22px rgba(15, 31, 21, .38));
 }
-.bag-companion__svg .bag-body {
-  fill: #FFFFFF;
-  stroke: rgba(42, 82, 56, .12);
-  stroke-width: 1;
+.bag-companion__bag img {
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
 }
-.bag-companion__svg .bag-handle {
-  fill: none;
-  stroke: #2A5238;
-  stroke-width: 4.5;
-  stroke-linecap: round;
+
+/* Front bag — default position */
+.bag-companion__bag--front {
+  transform: rotateY(0) translateZ(20px);
 }
-.bag-companion__svg .bag-logo-bg {
-  fill: #2A5238;
+
+/* Back bag — slightly offset, smaller, hidden until flip */
+.bag-companion__bag--back {
+  transform: rotateY(0) translateZ(-25px) translateX(-12px) scale(.9);
+  opacity: .55;
+  filter: drop-shadow(0 10px 18px rgba(15, 31, 21, .28)) brightness(.92);
 }
-.bag-companion__svg .bag-logo path {
-  fill: none;
-  stroke: #B8841E;
-  stroke-width: 2.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.bag-companion__svg .bag-word {
-  font-family: var(--f-display);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: -.02em;
-  fill: #2A5238;
-}
-.bag-companion__svg .bag-shadow {
-  fill: rgba(15, 31, 21, .15);
-  animation: bagShadow 4s ease-in-out infinite;
-  transform-origin: center;
+
+/* Sombra projetada no chão */
+.bag-companion__shadow {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 70%;
+  height: 14px;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse, rgba(15,31,21,.42) 0%, rgba(15,31,21,0) 65%);
+  filter: blur(2px);
+  animation: bagShadow 4.4s ease-in-out infinite;
 }
 @keyframes bagShadow {
-  0%, 100% { transform: scaleX(1); opacity: .6; }
-  50%      { transform: scaleX(.85); opacity: .4; }
+  0%, 100% { transform: translateX(-50%) scaleX(1) scaleY(1);   opacity: .65; }
+  50%      { transform: translateX(-50%) scaleX(.78) scaleY(.85); opacity: .45; }
 }
+
+/* ============== ROTAÇÕES POR ESTADO (cada vez que muda de seção, vira) ============== */
+.bag-companion[data-flip="r1"] .bag-companion__bag--front { transform: rotateY(160deg) translateZ(20px); }
+.bag-companion[data-flip="r1"] .bag-companion__bag--back  { transform: rotateY(0deg)   translateZ(-25px) translateX(-12px) scale(.94); opacity: 1; filter: drop-shadow(0 14px 22px rgba(15,31,21,.38)); }
+
+.bag-companion[data-flip="r2"] .bag-companion__bag--front { transform: rotateY(-160deg) translateZ(20px); }
+.bag-companion[data-flip="r2"] .bag-companion__bag--back  { transform: rotateY(0deg)    translateZ(-25px) translateX(12px) scale(.94);  opacity: 1; filter: drop-shadow(0 14px 22px rgba(15,31,21,.38)); }
+
+.bag-companion[data-flip="up"] .bag-companion__bag--front { transform: rotateX(60deg) translateZ(20px); }
+.bag-companion[data-flip="up"] .bag-companion__bag--back  { transform: rotateY(-25deg) translateZ(-25px) translateX(-8px) scale(.92); opacity: .9; }
+
+.bag-companion[data-flip="tilt"] .bag-companion__bag--front { transform: rotateY(-25deg) rotateX(8deg) translateZ(20px); }
+.bag-companion[data-flip="tilt"] .bag-companion__bag--back  { transform: rotateY(15deg)  translateZ(-25px) translateX(-14px) scale(.92); opacity: .85; }
+
+.bag-companion[data-flip="r3"] .bag-companion__bag--front { transform: rotateY(180deg) translateZ(20px); }
+.bag-companion[data-flip="r3"] .bag-companion__bag--back  { transform: rotateY(0deg) translateZ(0px) scale(1); opacity: 1; filter: drop-shadow(0 14px 22px rgba(15,31,21,.4)); }
 
 /* Speech bubble */
 .bag-companion__bubble {
@@ -667,11 +695,11 @@
   bottom: 10vh;
 }
 
-/* Produtos — esquerda média */
+/* Produtos — direita inferior, fora da grid */
 .bag-companion.bag-state-produtos {
-  left: 3vw;
-  right: auto;
-  bottom: 12vh;
+  right: 2vw;
+  left: auto;
+  bottom: 6vh;
 }
 
 /* Decreto — direita superior */

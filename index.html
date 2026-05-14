@@ -640,42 +640,17 @@
 
 <!-- ===== SACOLA MASCOTE — companheira de scroll ===== -->
 <div class="bag-companion" id="bagCompanion" aria-hidden="true">
-  <div class="bag-companion__inner">
-    <svg class="bag-companion__svg" viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg">
-      <!-- Shadow ground -->
-      <ellipse class="bag-shadow" cx="60" cy="145" rx="40" ry="4"/>
-
-      <!-- Handles -->
-      <path class="bag-handle" d="M 38 50 Q 38 22 50 22 L 56 22 Q 60 22 60 28 L 60 52" />
-      <path class="bag-handle" d="M 60 52 L 60 28 Q 60 22 64 22 L 70 22 Q 82 22 82 50" />
-
-      <!-- Body -->
-      <path class="bag-body" d="M 25 50
-        L 95 50
-        Q 100 50 100 56
-        L 100 130
-        Q 100 138 92 138
-        L 28 138
-        Q 20 138 20 130
-        L 20 56
-        Q 20 50 25 50 Z"/>
-
-      <!-- Logo container circle -->
-      <circle class="bag-logo-bg" cx="60" cy="88" r="22"/>
-
-      <!-- Recycle symbol simplified -->
-      <g class="bag-logo">
-        <path d="M 53 82 L 60 76 L 67 82" />
-        <path d="M 60 76 L 60 90" />
-        <path d="M 50 94 L 47 100 L 53 100" />
-        <path d="M 47 100 L 56 105" />
-        <path d="M 70 94 L 73 100 L 67 100" />
-        <path d="M 73 100 L 64 105" />
-      </g>
-
-      <!-- Wordmark -->
-      <text class="bag-word" x="60" y="125" text-anchor="middle">Qualità</text>
-    </svg>
+  <div class="bag-companion__stage">
+    <!-- Sombra no chão -->
+    <div class="bag-companion__shadow"></div>
+    <!-- Sacola de trás (aparece quando a da frente vira) -->
+    <div class="bag-companion__bag bag-companion__bag--back">
+      <img src="assets/sacola-mascote.png" alt="" loading="lazy" decoding="async" />
+    </div>
+    <!-- Sacola da frente -->
+    <div class="bag-companion__bag bag-companion__bag--front">
+      <img src="assets/sacola-mascote.png" alt="" loading="lazy" decoding="async" />
+    </div>
     <div class="bag-companion__bubble" id="bagBubble">
       <span class="bag-companion__bubble-text">Oi! Sou 100% reciclada ✨</span>
     </div>
