@@ -509,8 +509,8 @@
 .zoom-in {
   --zp: 0;             /* progresso da seção: 0 → 1 */
   position: relative;
-  height: 280vh;        /* seção alta pra scroll lento */
-  background: linear-gradient(180deg, var(--c-cream) 0%, #0F1F15 40%, #0F1F15 100%);
+  height: 220vh;        /* seção alta pra scroll dramático */
+  background: linear-gradient(180deg, var(--c-cream) 0%, #0F1F15 30%, #050B07 100%);
   color: var(--c-cream);
 }
 .zoom-in__stage {
@@ -520,6 +520,15 @@
   display: grid;
   place-items: center;
   overflow: hidden;
+}
+/* Vinheta dramática que escurece bordas quando zoom alto — sensação de "entrar dentro" */
+.zoom-in__stage::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0, calc(var(--zp) * .55)) 100%);
+  pointer-events: none;
+  z-index: 6;
+  transition: background .1s linear;
 }
 .zoom-in__grain {
   position: absolute; inset: 0;
@@ -555,15 +564,40 @@
 }
 .zoom-in__title em { font-style: italic; color: var(--c-amber-soft); font-weight: 300; }
 
-/* Container que escala — TUDO dentro segue */
+.zoom-in__hint {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  margin-top: 1.6rem;
+  padding: .5rem 1rem;
+  font-family: var(--f-mono);
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--c-amber-soft);
+  border: 1px solid rgba(232,185,49,.4);
+  border-radius: var(--r-pill);
+  background: rgba(232,185,49,.08);
+}
+.zoom-in__hint-arrow {
+  display: inline-block;
+  animation: hintBounce 1.4s ease-in-out infinite;
+}
+@keyframes hintBounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(4px); }
+}
+
+/* Container que escala — TUDO dentro segue. Curva mais agressiva. */
 .zoom-in__bag-wrap {
   position: relative;
-  width: min(280px, 38vw);
+  width: min(380px, 46vw);
   aspect-ratio: 351 / 500;
-  transform: scale(calc(.85 + var(--zp) * 4.5));
+  transform: scale(calc(1 + var(--zp) * var(--zp) * 6.5 + var(--zp) * 1.5));
   transform-origin: 50% 50%;
   transition: transform .05s linear;
   z-index: 2;
+  will-change: transform;
 }
 
 /* Casca da sacola (PNG real) que vai virando translúcido */
@@ -573,8 +607,10 @@
   display: grid;
   place-items: center;
   z-index: 3;
-  opacity: calc(1 - var(--zp) * .75);   /* vai sumindo até .25 de opacidade */
-  filter: drop-shadow(0 30px 50px rgba(0,0,0,.5)) brightness(calc(1 + var(--zp) * .15));
+  opacity: calc(1 - var(--zp) * .65);   /* mantém visível mais tempo (.35 no final) */
+  filter:
+    drop-shadow(0 30px 50px rgba(0,0,0,.55))
+    brightness(calc(1 + var(--zp) * .25));
   transition: opacity .05s linear, filter .05s linear;
 }
 .zoom-in__bag-shell img {
@@ -730,9 +766,10 @@
 }
 
 /* Hide bag-companion mascote enquanto a zoom-in tá ativa */
-.bag-companion.bag-state-zoom-in {
-  opacity: 0;
+.bag-companion.bag-companion.bag-state-zoom-in {
+  opacity: 0 !important;
   pointer-events: none;
+  transform: translate3d(0, 80px, 0);
 }
 
 /* Mobile responsivo */

@@ -465,8 +465,9 @@
     }
 
     // Use IntersectionObserver per section (avoid scroll-thrash)
+    // Lower threshold + rootMargin pra detectar seções grandes (zoom-in) que
+    // raramente atingem 25% de ratio na viewport
     const bagIo = new IntersectionObserver((entries) => {
-      // Pick the entry most visible
       let best = null;
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -474,8 +475,20 @@
         }
       });
       if (best) applyState(best.target.id);
-    }, { threshold: [0.25, 0.5, 0.75] });
+    }, { threshold: [0, 0.1, 0.25, 0.5], rootMargin: '-30% 0px -30% 0px' });
     sectionEls.forEach(el => bagIo.observe(el));
+
+    // Dedicated observer for zoom-in section (tall sticky scene) — uses
+    // a thin slice at viewport center so the section "wins" while it's pinned
+    const zoomEl = document.getElementById('zoom-in');
+    if (zoomEl) {
+      const zoomIo = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) applyState('zoom-in');
+        });
+      }, { rootMargin: '-40% 0px -40% 0px' });
+      zoomIo.observe(zoomEl);
+    }
 
     // also watch hero + footer via separate observers
     const heroEl = document.getElementById('hero');
