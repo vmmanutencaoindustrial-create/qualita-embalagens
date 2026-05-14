@@ -391,6 +391,112 @@
     io.observe(timeline);
   }
 
+  /* ============== BAG COMPANION (mascote percorre o site) ============== */
+  const bag = document.getElementById('bagCompanion');
+  if (bag) {
+    const bubble = document.getElementById('bagBubble');
+    const bubbleText = bubble && bubble.querySelector('.bag-companion__bubble-text');
+
+    const states = {
+      hero:              { fall: false, msg: null },
+      marquee:           { fall: false, msg: null,                              hide: true },
+      manifesto:         { fall: false, msg: 'Eu era resíduo. Agora circulo.' },
+      processo:          { fall: false, msg: null,                              hide: true },
+      stats:             { fall: false, msg: '100% pós-consumo ✓' },
+      produtos:          { fall: false, msg: 'Linha de 4 — escolhe a sua',      side: 'left' },
+      decreto:           { fall: false, msg: '22% obrigatório · 2026 ✓' },
+      diferenciais:      { fall: false, msg: 'Atendo Brasil todo',              side: 'left' },
+      sustentabilidade:  { fall: false, msg: 'Uma garrafa a menos no oceano 🌊' },
+      contato:           { fall: false, msg: 'Manda mensagem aí 👋',            side: 'left' },
+      footer:            { fall: true,  msg: null }
+    };
+
+    // Section order (for first-pass and unknown detection)
+    const order = Object.keys(states);
+    const sectionEls = order.map(id => document.getElementById(id)).filter(Boolean);
+
+    let currentState = null;
+    function applyState(name) {
+      if (!states[name] || name === currentState) return;
+      currentState = name;
+      // remove old states
+      order.forEach(s => bag.classList.remove('bag-state-' + s));
+      bag.classList.add('bag-state-' + name);
+
+      // visibility
+      const cfg = states[name];
+      if (cfg.hide) {
+        bag.classList.remove('is-visible');
+        bag.classList.remove('has-bubble');
+      } else {
+        bag.classList.add('is-visible');
+      }
+
+      // side
+      bag.classList.toggle('is-left', cfg.side === 'left');
+
+      // bubble message
+      if (cfg.msg && bubbleText) {
+        bubbleText.textContent = cfg.msg;
+        // delay a tick so bubble fades after the bag moves
+        setTimeout(() => {
+          if (currentState === name && !cfg.hide) bag.classList.add('has-bubble');
+        }, 350);
+      } else {
+        bag.classList.remove('has-bubble');
+      }
+    }
+
+    // Use IntersectionObserver per section (avoid scroll-thrash)
+    const bagIo = new IntersectionObserver((entries) => {
+      // Pick the entry most visible
+      let best = null;
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          if (!best || entry.intersectionRatio > best.intersectionRatio) best = entry;
+        }
+      });
+      if (best) applyState(best.target.id);
+    }, { threshold: [0.25, 0.5, 0.75] });
+    sectionEls.forEach(el => bagIo.observe(el));
+
+    // also watch hero + footer via separate observers
+    const heroEl = document.getElementById('hero');
+    if (heroEl) {
+      const heroIo = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting && e.intersectionRatio > 0.4) applyState('hero');
+        });
+      }, { threshold: 0.4 });
+      heroIo.observe(heroEl);
+    }
+    const footerEl = document.querySelector('.footer');
+    if (footerEl) {
+      const footerIo = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting && e.intersectionRatio > 0.15) applyState('footer');
+        });
+      }, { threshold: 0.15 });
+      footerIo.observe(footerEl);
+    }
+
+    // First boot: assume hero
+    applyState('hero');
+
+    // After 1.4s, if still on hero (page top), show bag with welcome msg
+    setTimeout(() => {
+      if (window.scrollY < 100) {
+        bag.classList.add('is-visible');
+        if (bubbleText) bubbleText.textContent = 'Oi! Sou 100% reciclada ✨';
+        bag.classList.add('has-bubble');
+        // Auto-hide bubble after 4s
+        setTimeout(() => {
+          if (currentState === 'hero') bag.classList.remove('has-bubble');
+        }, 4500);
+      }
+    }, 1600);
+  }
+
   /* ============== CONSOLE BANNER PREMIUM ============== */
   console.log('%c Qualità · Premium Layer 2026 ', 'background:#B8841E;color:#1F4530;padding:8px 14px;font-family:monospace;font-weight:bold;letter-spacing:.1em;');
 })();

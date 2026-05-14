@@ -502,6 +502,232 @@
 }
 .section-eyebrow.is-in::before { width: 42px; }
 
+/* =====================================================================
+   BAG COMPANION — sacola mascote que percorre o site inteiro
+   ===================================================================== */
+.bag-companion {
+  position: fixed;
+  z-index: 80;
+  pointer-events: none;
+  width: 90px;
+  height: 130px;
+  opacity: 0;
+  transform: translate3d(0, 40px, 0);
+  transition:
+    transform .9s var(--ease-soft),
+    opacity .6s var(--ease-out),
+    top .9s var(--ease-soft),
+    left .9s var(--ease-soft),
+    right .9s var(--ease-soft),
+    bottom .9s var(--ease-soft);
+  /* default position — bottom-right */
+  right: 2.5vw;
+  bottom: 6vh;
+  filter: drop-shadow(0 10px 25px rgba(15, 31, 21, .35));
+}
+.bag-companion.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+.bag-companion__inner {
+  position: relative;
+  width: 100%; height: 100%;
+  animation: bagSway 4s ease-in-out infinite;
+  transform-origin: 50% 18%;
+  will-change: transform;
+}
+@keyframes bagSway {
+  0%, 100% { transform: rotate(-2.5deg); }
+  50%      { transform: rotate(2.5deg); }
+}
+.bag-companion__svg {
+  width: 100%; height: 100%;
+  display: block;
+}
+.bag-companion__svg .bag-body {
+  fill: #FFFFFF;
+  stroke: rgba(42, 82, 56, .12);
+  stroke-width: 1;
+}
+.bag-companion__svg .bag-handle {
+  fill: none;
+  stroke: #2A5238;
+  stroke-width: 4.5;
+  stroke-linecap: round;
+}
+.bag-companion__svg .bag-logo-bg {
+  fill: #2A5238;
+}
+.bag-companion__svg .bag-logo path {
+  fill: none;
+  stroke: #B8841E;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.bag-companion__svg .bag-word {
+  font-family: var(--f-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  fill: #2A5238;
+}
+.bag-companion__svg .bag-shadow {
+  fill: rgba(15, 31, 21, .15);
+  animation: bagShadow 4s ease-in-out infinite;
+  transform-origin: center;
+}
+@keyframes bagShadow {
+  0%, 100% { transform: scaleX(1); opacity: .6; }
+  50%      { transform: scaleX(.85); opacity: .4; }
+}
+
+/* Speech bubble */
+.bag-companion__bubble {
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 14px);
+  transform: translateY(-50%) scale(.85);
+  background: var(--c-cream);
+  color: var(--c-deep);
+  border: 1px solid var(--c-line);
+  border-radius: 14px;
+  padding: .55rem .85rem;
+  font-family: var(--f-display);
+  font-size: .82rem;
+  font-weight: 500;
+  white-space: nowrap;
+  letter-spacing: -.01em;
+  opacity: 0;
+  transition: opacity .4s var(--ease-out), transform .5s var(--ease-out);
+  box-shadow: 0 12px 30px -8px rgba(15,31,21,.25);
+}
+.bag-companion__bubble::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -6px;
+  width: 10px; height: 10px;
+  background: var(--c-cream);
+  border-right: 1px solid var(--c-line);
+  border-bottom: 1px solid var(--c-line);
+  transform: translateY(-50%) rotate(-45deg);
+}
+.bag-companion.has-bubble .bag-companion__bubble {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+/* Side variants for bubble (if bag goes to left edge) */
+.bag-companion.is-left .bag-companion__bubble {
+  right: auto;
+  left: calc(100% + 14px);
+}
+.bag-companion.is-left .bag-companion__bubble::after {
+  right: auto;
+  left: -6px;
+  border-right: 0; border-bottom: 0;
+  border-left: 1px solid var(--c-line);
+  border-top: 1px solid var(--c-line);
+  transform: translateY(-50%) rotate(-45deg);
+}
+
+/* ============== STATE POSITIONS PER SECTION ============== */
+
+/* Hero — direita inferior, posição relativa ao stats panel */
+.bag-companion.bag-state-hero {
+  right: 3vw;
+  bottom: 18vh;
+}
+
+/* Marquee — atravessa */
+.bag-companion.bag-state-marquee {
+  bottom: auto;
+  top: 8vh;
+  right: -120px;
+  transform: rotate(-12deg);
+  opacity: 0;
+}
+
+/* Manifesto — fica à direita, falando */
+.bag-companion.bag-state-manifesto {
+  right: 4vw;
+  bottom: 8vh;
+}
+
+/* Processo — esconde (morph SVG já tá lá) */
+.bag-companion.bag-state-processo {
+  opacity: 0;
+  right: -120px;
+}
+
+/* Stats — direita inferior */
+.bag-companion.bag-state-stats {
+  right: 3vw;
+  bottom: 10vh;
+}
+
+/* Produtos — esquerda média */
+.bag-companion.bag-state-produtos {
+  left: 3vw;
+  right: auto;
+  bottom: 12vh;
+}
+
+/* Decreto — direita superior */
+.bag-companion.bag-state-decreto {
+  right: 3vw;
+  bottom: auto;
+  top: 18vh;
+}
+
+/* Diferenciais bento — esquerda */
+.bag-companion.bag-state-diferenciais {
+  left: 3vw;
+  right: auto;
+  bottom: 8vh;
+}
+
+/* Impacto sustentabilidade — direita */
+.bag-companion.bag-state-sustentabilidade {
+  right: 3vw;
+  bottom: 12vh;
+}
+
+/* Quote — esconde */
+.bag-companion.bag-state-quote {
+  opacity: 0;
+}
+
+/* Contato — esquerda inferior, "chegou" */
+.bag-companion.bag-state-contato {
+  left: 4vw;
+  right: auto;
+  bottom: 6vh;
+}
+
+/* Footer — sumindo embora */
+.bag-companion.bag-state-footer {
+  bottom: -120px;
+  opacity: 0;
+}
+
+/* Mobile — esconde por padrão (cabe pouco) */
+@media (max-width: 900px) {
+  .bag-companion { width: 60px; height: 86px; right: 3vw; bottom: 3vh; }
+  .bag-companion__bubble { font-size: .72rem; padding: .4rem .65rem; }
+  .bag-companion.bag-state-produtos,
+  .bag-companion.bag-state-diferenciais,
+  .bag-companion.bag-state-contato { left: auto; right: 3vw; }
+  .bag-companion.bag-state-marquee { display: none; }
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .bag-companion__inner { animation: none; }
+  .bag-companion__svg .bag-shadow { animation: none; }
+}
+
 /* ============== MOBILE RESPONSIVE ============== */
 @media (max-width: 900px) {
   .process__morph { width: 70%; max-width: 280px; }
