@@ -115,6 +115,31 @@
 <!-- Page fade overlay para anchor transitions -->
 <div class="page-fade" id="pageFade" aria-hidden="true"></div>
 
+<!-- NoiseOverlay global (grain SVG fullscreen mix-blend-mode overlay) -->
+<div class="noise-overlay" aria-hidden="true"></div>
+
+<!-- PersistentBag — trilha dourada vertical conectando o site inteiro -->
+<div class="persistent-bag" id="persistentBag" aria-hidden="true">
+  <svg viewBox="0 0 4 100" preserveAspectRatio="none">
+    <line x1="2" y1="0" x2="2" y2="100" stroke="rgba(232,185,49,.35)" stroke-width="1.2" stroke-dasharray="2,4"/>
+  </svg>
+  <div class="persistent-bag__head"></div>
+</div>
+
+<!-- Cinematic Letterbox — barras pretas filme -->
+<div class="cinematic-letterbox" aria-hidden="true">
+  <div class="cinematic-letterbox__bar cinematic-letterbox__bar--top"></div>
+  <div class="cinematic-letterbox__bar cinematic-letterbox__bar--bottom"></div>
+</div>
+
+<!-- Locale + Clock indicator (toque editorial) -->
+<div class="locale-clock" id="localeClock" aria-hidden="true">
+  <span class="locale-clock__dot"></span>
+  <span class="locale-clock__city">São Paulo</span>
+  <span class="locale-clock__sep">·</span>
+  <span class="locale-clock__time" id="localeTime">--:--</span>
+</div>
+
 <!-- ===== SCROLL PROGRESS ===== -->
 <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress__bar" id="scrollBar"></div></div>
 

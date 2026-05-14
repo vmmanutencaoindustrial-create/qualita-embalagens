@@ -803,6 +803,137 @@
     });
   }
 
+  /* ============== PERSISTENT BAG TRAIL ============== */
+  const persistentBag = document.getElementById('persistentBag');
+  if (persistentBag) {
+    // ativa quando scroll passa do hero
+    const heroEl = document.getElementById('hero');
+    if (heroEl) {
+      const hio = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting && e.intersectionRatio > 0.4) {
+            persistentBag.classList.remove('is-active');
+          } else {
+            persistentBag.classList.add('is-active');
+          }
+        });
+      }, { threshold: [0.2, 0.4, 0.6] });
+      hio.observe(heroEl);
+    }
+
+    // posição da cabeça segue scroll progress
+    let rafPB;
+    function updatePBHead() {
+      const progress = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+      const headY = Math.min(Math.max(progress, 0.05), 0.95) * 100;
+      persistentBag.style.setProperty('--head-y', headY + '%');
+      rafPB = null;
+    }
+    window.addEventListener('scroll', () => {
+      if (rafPB) return;
+      rafPB = requestAnimationFrame(updatePBHead);
+    }, { passive: true });
+    updatePBHead();
+
+    // some no footer
+    const footerEl = document.querySelector('.footer');
+    if (footerEl) {
+      const fio = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting && e.intersectionRatio > 0.15) persistentBag.classList.remove('is-active');
+        });
+      }, { threshold: [0.15, 0.3] });
+      fio.observe(footerEl);
+    }
+  }
+
+  /* ============== CINEMATIC LETTERBOX ============== */
+  const letterbox = document.querySelector('.cinematic-letterbox');
+  if (letterbox) {
+    // Ativa nas seções zoom-in e ecosystem (cenas cinematográficas)
+    const cinematicSecs = ['zoom-in', 'ecosystem'];
+    cinematicSecs.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting && e.intersectionRatio > 0.3) {
+            letterbox.classList.add('is-active');
+          } else {
+            letterbox.classList.remove('is-active');
+          }
+        });
+      }, { threshold: [0.3, 0.6] });
+      io.observe(el);
+    });
+  }
+
+  /* ============== LOCALE + CLOCK ============== */
+  const timeEl = document.getElementById('localeTime');
+  if (timeEl) {
+    function updateClock() {
+      const now = new Date();
+      const sp = new Date(now.toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+      const h = String(sp.getHours()).padStart(2, '0');
+      const m = String(sp.getMinutes()).padStart(2, '0');
+      timeEl.textContent = h + ':' + m;
+    }
+    updateClock();
+    setInterval(updateClock, 30000);
+  }
+
+  /* ============== SCROLL SKEW — stats hero ============== */
+  if (enableHeavy) {
+    let lastScroll = window.scrollY;
+    let velocity = 0;
+    let rafSkew;
+    const skewTargets = document.querySelectorAll('.hero__stats strong, .stats__num, .impact__big');
+    skewTargets.forEach(el => el.classList.add('scroll-skew'));
+
+    function updateSkew() {
+      const now = window.scrollY;
+      velocity = (now - lastScroll) * 0.07;
+      lastScroll = now;
+      velocity = Math.max(Math.min(velocity, 4), -4);
+      skewTargets.forEach(el => el.style.setProperty('--skew', velocity.toFixed(2) + 'deg'));
+      velocity *= 0.85;
+      if (Math.abs(velocity) > 0.05) {
+        rafSkew = requestAnimationFrame(updateSkew);
+      } else {
+        skewTargets.forEach(el => el.style.setProperty('--skew', '0deg'));
+        rafSkew = null;
+      }
+    }
+    window.addEventListener('scroll', () => {
+      if (!rafSkew) rafSkew = requestAnimationFrame(updateSkew);
+    }, { passive: true });
+  }
+
+  /* ============== LENIS SMOOTH SCROLL (carrega via CDN) ============== */
+  if (!reduced && enableHeavy && !window.__lenis_loaded) {
+    window.__lenis_loaded = true;
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/lenis@1.1.20/dist/lenis.min.js';
+    script.onload = () => {
+      if (!window.Lenis) return;
+      const lenis = new window.Lenis({
+        duration: 1.1,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+        wheelMultiplier: 1.0,
+        touchMultiplier: 1.5
+      });
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
+      // Substitui scroll-behavior: smooth nativo (Lenis intercepta wheel)
+      document.documentElement.style.scrollBehavior = 'auto';
+    };
+    document.head.appendChild(script);
+  }
+
   /* ============== CONSOLE BANNER PREMIUM ============== */
   console.log('%c Qualità · Premium Layer 2026 ', 'background:#B8841E;color:#1F4530;padding:8px 14px;font-family:monospace;font-weight:bold;letter-spacing:.1em;');
 })();
