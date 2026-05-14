@@ -503,6 +503,257 @@
 .section-eyebrow.is-in::before { width: 42px; }
 
 /* =====================================================================
+   ZOOM-IN CINEMATOGRÁFICO — Por dentro da sacola
+   Scroll-driven zoom: sacola cresce, fica translúcida, revela interior
+   ===================================================================== */
+.zoom-in {
+  --zp: 0;             /* progresso da seção: 0 → 1 */
+  position: relative;
+  height: 280vh;        /* seção alta pra scroll lento */
+  background: linear-gradient(180deg, var(--c-cream) 0%, #0F1F15 40%, #0F1F15 100%);
+  color: var(--c-cream);
+}
+.zoom-in__stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.zoom-in__grain {
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+  opacity: calc(.18 + var(--zp) * .12);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Texto cabeçalho — sai pra cima conforme zoom */
+.zoom-in__head {
+  position: absolute;
+  top: 10vh;
+  left: 50%;
+  transform: translateX(-50%) translateY(calc(var(--zp) * -100px));
+  text-align: center;
+  z-index: 4;
+  opacity: calc(1 - var(--zp) * 1.4);
+  transition: opacity .1s linear;
+  max-width: 720px;
+  padding: 0 var(--gutter);
+}
+.zoom-in__head .section-eyebrow { color: var(--c-amber-soft); margin-bottom: 1.2rem; justify-content: center; display: inline-flex; }
+.zoom-in__head .section-eyebrow::before { background: var(--c-amber-soft); }
+.zoom-in__title {
+  font-family: var(--f-display);
+  font-size: clamp(2.2rem, 5vw, 4.6rem);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -.035em;
+  color: var(--c-cream);
+}
+.zoom-in__title em { font-style: italic; color: var(--c-amber-soft); font-weight: 300; }
+
+/* Container que escala — TUDO dentro segue */
+.zoom-in__bag-wrap {
+  position: relative;
+  width: min(280px, 38vw);
+  aspect-ratio: 351 / 500;
+  transform: scale(calc(.85 + var(--zp) * 4.5));
+  transform-origin: 50% 50%;
+  transition: transform .05s linear;
+  z-index: 2;
+}
+
+/* Casca da sacola (PNG real) que vai virando translúcido */
+.zoom-in__bag-shell {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 3;
+  opacity: calc(1 - var(--zp) * .75);   /* vai sumindo até .25 de opacidade */
+  filter: drop-shadow(0 30px 50px rgba(0,0,0,.5)) brightness(calc(1 + var(--zp) * .15));
+  transition: opacity .05s linear, filter .05s linear;
+}
+.zoom-in__bag-shell img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+}
+
+/* Camada interior — flakes, garrafa, filme — aparece quando zoom alto */
+.zoom-in__inside {
+  position: absolute;
+  inset: 12% 18% 8% 18%;
+  z-index: 2;
+  opacity: calc(var(--zp) * 1.4 - 0.15);
+  transition: opacity .05s linear;
+  pointer-events: none;
+}
+
+/* Flakes coloridos voando dentro */
+.zoom-in__flake {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  filter: blur(.5px);
+  box-shadow: 0 4px 8px rgba(0,0,0,.3);
+  animation: flakeDance 4s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+  transform-origin: center;
+}
+.zoom-in__flake--blue   { background: radial-gradient(circle, #56C8E8, #2A8AAB); width: 22px; height: 22px; border-radius: 6px; }
+.zoom-in__flake--green  { background: radial-gradient(circle, #6FBF82, #2A5238); width: 18px; height: 18px; border-radius: 4px; }
+.zoom-in__flake--amber  { background: radial-gradient(circle, #E8B931, #B8841E); width: 16px; height: 16px; }
+.zoom-in__flake--white  { background: radial-gradient(circle, #F5F1E8, #C8C8C0); width: 14px; height: 14px; border-radius: 3px; }
+
+@keyframes flakeDance {
+  0%,100% { transform: translate(0,0) rotate(0deg) scale(1); }
+  25%     { transform: translate(8px, -10px) rotate(45deg) scale(1.15); }
+  50%     { transform: translate(-6px, 6px) rotate(-25deg) scale(.9); }
+  75%     { transform: translate(4px, 12px) rotate(20deg) scale(1.05); }
+}
+
+/* Garrafa silhueta no centro */
+.zoom-in__bottle {
+  position: absolute;
+  top: 18%; left: 38%;
+  width: 24%; height: 50%;
+  opacity: calc((var(--zp) - .25) * 2.2);
+  transform: translateY(calc((1 - var(--zp)) * 30px)) rotate(calc(var(--zp) * -8deg));
+  transition: opacity .05s linear, transform .05s linear;
+  filter: drop-shadow(0 6px 12px rgba(50,180,220,.25));
+}
+
+/* Filme plástico ondulando */
+.zoom-in__film {
+  position: absolute;
+  bottom: 12%; left: 10%;
+  width: 80%; height: 20%;
+  opacity: calc((var(--zp) - .35) * 2.5);
+  animation: filmWave 6s ease-in-out infinite;
+}
+@keyframes filmWave {
+  0%,100% { transform: translateY(0) scaleY(1); }
+  50%     { transform: translateY(-4px) scaleY(.95); }
+}
+
+/* Texto interno — 40+ garrafas, 3 polímeros etc. (FORA do bag-wrap, no stage) */
+.zoom-in__inside-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  gap: clamp(2.5rem, 5vw, 6rem);
+  z-index: 5;
+  opacity: calc((var(--zp) - .55) * 3);
+  transition: opacity .1s linear, transform .15s linear;
+  pointer-events: none;
+  transform: translate(-50%, -50%) translateY(calc((1 - var(--zp)) * 30px));
+  text-align: center;
+}
+.zoom-in__stat {
+  text-align: center;
+  color: var(--c-cream);
+}
+.zoom-in__stat strong {
+  display: block;
+  font-family: var(--f-display);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -.04em;
+  color: var(--c-amber-soft);
+  margin-bottom: .4rem;
+  text-shadow: 0 4px 20px rgba(0,0,0,.5);
+}
+.zoom-in__stat span {
+  display: block;
+  font-family: var(--f-mono);
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: rgba(245,241,232,.85);
+  line-height: 1.4;
+}
+
+/* Legenda inferior aparece no final */
+.zoom-in__caption {
+  position: absolute;
+  bottom: 6vh; left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex; align-items: center; gap: .6rem;
+  padding: .55rem 1rem;
+  background: rgba(232,185,49,.12);
+  border: 1px solid rgba(232,185,49,.35);
+  border-radius: var(--r-pill);
+  font-family: var(--f-mono);
+  font-size: .74rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--c-amber-soft);
+  z-index: 4;
+  opacity: calc((var(--zp) - .55) * 3);
+  transition: opacity .1s linear;
+}
+.zoom-in__caption-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--c-amber-soft);
+  box-shadow: 0 0 0 0 rgba(232,185,49,.5);
+  animation: livePulse 1.6s ease-out infinite;
+}
+
+/* Progresso visual da cena */
+.zoom-in__progress {
+  position: absolute;
+  top: 50%;
+  right: 2vw;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 40vh;
+  background: rgba(245,241,232,.15);
+  z-index: 5;
+  overflow: hidden;
+  border-radius: 2px;
+}
+.zoom-in__progress-fill {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: calc(var(--zp) * 100%);
+  background: linear-gradient(180deg, var(--c-amber-soft), var(--c-amber));
+  box-shadow: 0 0 10px rgba(232,185,49,.6);
+  transition: height .05s linear;
+}
+
+/* Hide bag-companion mascote enquanto a zoom-in tá ativa */
+.bag-companion.bag-state-zoom-in {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Mobile responsivo */
+@media (max-width: 900px) {
+  .zoom-in { height: 220vh; }
+  .zoom-in__bag-wrap { width: 60vw; }
+  .zoom-in__head { top: 8vh; }
+  .zoom-in__inside-text { gap: 2.5vw; }
+  .zoom-in__progress { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zoom-in { height: auto; padding: 6rem var(--gutter); }
+  .zoom-in__stage { position: static; height: auto; }
+  .zoom-in__bag-wrap { transform: none; width: 240px; }
+  .zoom-in__bag-shell { opacity: 1; }
+  .zoom-in__inside, .zoom-in__inside-text, .zoom-in__caption { opacity: 1; }
+  .zoom-in__flake, .zoom-in__bottle, .zoom-in__film { animation: none; }
+}
+
+/* =====================================================================
    BAG COMPANION — sacola mascote real (PNG) com 3D + sacola de trás
    ===================================================================== */
 .bag-companion {

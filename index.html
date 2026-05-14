@@ -232,6 +232,88 @@
   </div>
 </section>
 
+<!-- ===== ZOOM-IN CINEMATOGRÁFICO — Por dentro da sacola ===== -->
+<section class="zoom-in" id="zoom-in" aria-label="Por dentro da sacola Qualità">
+  <div class="zoom-in__stage">
+    <div class="zoom-in__grain" aria-hidden="true"></div>
+
+    <!-- Texto fixo no topo da cena -->
+    <div class="zoom-in__head">
+      <span class="section-eyebrow">Por dentro</span>
+      <h2 class="zoom-in__title">
+        Olha o que tem<br>
+        <em>dentro de cada sacola.</em>
+      </h2>
+    </div>
+
+    <!-- Stage central com sacola que cresce -->
+    <div class="zoom-in__bag-wrap" aria-hidden="true">
+      <!-- camada externa: a sacola que cresce e fica semi-transparente -->
+      <div class="zoom-in__bag-shell">
+        <img src="assets/sacola-mascote.png" alt="" loading="lazy" decoding="async" />
+      </div>
+
+      <!-- camada interior: resíduos visíveis quando zoom alto -->
+      <div class="zoom-in__inside">
+        <!-- Flakes coloridos voando dentro da sacola -->
+        <div class="zoom-in__flake zoom-in__flake--blue"   style="--x:18%;  --y:12%; --d:0s;"></div>
+        <div class="zoom-in__flake zoom-in__flake--green"  style="--x:72%;  --y:8%;  --d:.4s;"></div>
+        <div class="zoom-in__flake zoom-in__flake--amber"  style="--x:48%;  --y:22%; --d:.8s;"></div>
+        <div class="zoom-in__flake zoom-in__flake--white"  style="--x:30%;  --y:38%; --d:.2s;"></div>
+        <div class="zoom-in__flake zoom-in__flake--blue"   style="--x:65%;  --y:42%; --d:.6s;"></div>
+        <div class="zoom-in__flake zoom-in__flake--green"  style="--x:12%;  --y:56%; --d:1.0s;"></div>
+        <div class="zoom-in__flake zoom-in__flake--amber"  style="--x:82%;  --y:60%; --d:.3s;"></div>
+        <div class="zoom-in__flake zoom-in__flake--white"  style="--x:42%;  --y:72%; --d:.7s;"></div>
+        <div class="zoom-in__flake zoom-in__flake--blue"   style="--x:25%;  --y:88%; --d:.5s;"></div>
+        <div class="zoom-in__flake zoom-in__flake--green"  style="--x:75%;  --y:90%; --d:1.1s;"></div>
+        <div class="zoom-in__flake zoom-in__flake--amber"  style="--x:55%;  --y:50%; --d:.9s;"></div>
+        <div class="zoom-in__flake zoom-in__flake--white"  style="--x:88%;  --y:30%; --d:.15s;"></div>
+
+        <!-- Garrafa silhueta que aparece -->
+        <svg class="zoom-in__bottle" viewBox="0 0 100 200" aria-hidden="true">
+          <path d="M 42 18 L 58 18 L 58 32 Q 58 42 62 50 L 70 70 Q 76 88 76 110 L 76 178 Q 76 188 66 188 L 34 188 Q 24 188 24 178 L 24 110 Q 24 88 30 70 L 38 50 Q 42 42 42 32 Z"
+                fill="rgba(50, 180, 220, .35)" stroke="rgba(50, 180, 220, .8)" stroke-width="2"/>
+          <rect x="40" y="8" width="20" height="12" rx="2" fill="rgba(50, 180, 220, .6)" stroke="rgba(50, 180, 220, .9)" stroke-width="2"/>
+        </svg>
+
+        <!-- Filme plástico extrusado -->
+        <svg class="zoom-in__film" viewBox="0 0 200 80" aria-hidden="true">
+          <path d="M 0 30 Q 50 10 100 30 T 200 30 L 200 50 Q 150 70 100 50 T 0 50 Z"
+                fill="rgba(245, 241, 232, .35)" stroke="rgba(245, 241, 232, .7)" stroke-width="1.5"/>
+        </svg>
+      </div>
+
+    </div>
+
+    <!-- Texto revelado quando zoom alto — FORA do bag-wrap pra não escalar junto -->
+    <div class="zoom-in__inside-text">
+      <div class="zoom-in__stat">
+        <strong>40+</strong>
+        <span>garrafas PET<br>por sacola</span>
+      </div>
+      <div class="zoom-in__stat">
+        <strong>3</strong>
+        <span>polímeros<br>processados</span>
+      </div>
+      <div class="zoom-in__stat">
+        <strong>0%</strong>
+        <span>resina virgem<br>na linha standard</span>
+      </div>
+    </div>
+
+    <!-- Legenda inferior -->
+    <div class="zoom-in__caption">
+      <span class="zoom-in__caption-dot"></span>
+      <span class="zoom-in__caption-text">Resíduo · Rastreável · Real</span>
+    </div>
+
+    <!-- Indicador de progresso de scroll dentro da cena -->
+    <div class="zoom-in__progress" aria-hidden="true">
+      <span class="zoom-in__progress-fill"></span>
+    </div>
+  </div>
+</section>
+
 <!-- ===== PROCESSO SCROLLYTELLING ===== -->
 <section class="process" id="processo">
   <div class="process__intro">

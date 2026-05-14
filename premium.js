@@ -401,6 +401,7 @@
       hero:              { msg: 'Oi! Sou 100% reciclada ✨',     flip: null },
       marquee:           { msg: null,                            hide: true, flip: 'r1' },
       manifesto:         { msg: 'Eu era resíduo. Agora circulo.', flip: 'r2' },
+      'zoom-in':         { msg: null,                            hide: true, flip: 'up' },
       processo:          { msg: null,                            hide: true, flip: 'r1' },
       stats:             { msg: '100% pós-consumo ✓',            flip: 'tilt' },
       produtos:          { msg: 'Linha de 4 — escolhe a sua',    flip: 'r1' },
@@ -511,6 +512,31 @@
         }, 4500);
       }
     }, 1600);
+  }
+
+  /* ============== ZOOM-IN CINEMATOGRAFICO ============== */
+  const zoomSec = document.getElementById('zoom-in');
+  if (zoomSec && !reduced) {
+    let raf;
+    function updateZoom() {
+      const r = zoomSec.getBoundingClientRect();
+      const total = zoomSec.offsetHeight - window.innerHeight;
+      if (total <= 0) return;
+      // progress 0 quando topo da seção está na viewport top; 1 quando bottom alinha com bottom da viewport
+      const p = Math.min(Math.max(-r.top / total, 0), 1);
+      // shape: linger no início + final, acelera no meio (ease)
+      const eased = p < 0.5
+        ? 2 * p * p
+        : 1 - Math.pow(-2 * p + 2, 2) / 2;
+      zoomSec.style.setProperty('--zp', eased.toFixed(4));
+      raf = null;
+    }
+    window.addEventListener('scroll', () => {
+      if (raf) return;
+      raf = requestAnimationFrame(updateZoom);
+    }, { passive: true });
+    window.addEventListener('resize', updateZoom);
+    updateZoom();
   }
 
   /* ============== CONSOLE BANNER PREMIUM ============== */
