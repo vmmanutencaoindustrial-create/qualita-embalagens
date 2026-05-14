@@ -652,10 +652,12 @@
         ? 2 * p * p
         : 1 - Math.pow(-2 * p + 2, 2) / 2;
       zoomSec.style.setProperty('--zp', eased.toFixed(4));
-      // --mp: máscara de entrada, 0→1 nos primeiros 12% do scroll da seção
-      const mp = Math.min(p / 0.12, 1);
-      const mpEased = 1 - Math.pow(1 - mp, 3); // ease-out cubic
+      // --mp: máscara de entrada, 0→1 nos primeiros 8% do scroll da seção
+      const mp = Math.min(p / 0.08, 1);
+      const mpEased = 1 - Math.pow(1 - mp, 3);
       zoomSec.style.setProperty('--mp', mpEased.toFixed(4));
+      // is-entering só nos primeiros 12% (depois a mask some completamente)
+      zoomSec.classList.toggle('is-entering', p > 0 && p < 0.12);
       raf = null;
     }
     window.addEventListener('scroll', () => {

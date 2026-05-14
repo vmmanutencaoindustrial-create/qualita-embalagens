@@ -364,12 +364,12 @@
 .noise-overlay {
   position: fixed;
   inset: 0;
-  z-index: 90;
+  z-index: 1;  /* baixo z-index pra ficar abaixo do conteúdo */
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
   background-size: 200px;
-  opacity: .09;
-  mix-blend-mode: overlay;
+  opacity: .04;
+  mix-blend-mode: multiply;
   animation: noiseShift 8s steps(8) infinite;
 }
 @keyframes noiseShift {
@@ -1261,8 +1261,10 @@
   color: var(--c-cream);
 }
 
-/* MASK REVEAL — overlay creme cobre o stage no início e abre revelando a cena
-   via clip-path inverso: começa cheio, vai sumindo de fora pra dentro */
+/* MASK REVEAL — overlay creme aparece SÓ no momento da transição,
+   não na vida toda. Default = invisível.
+   Ativa quando section.is-entering (1º frame que ela entra na viewport),
+   abre durante os primeiros 12% de scroll (--mp = 0 → 1) */
 .zoom-in__mask-reveal {
   position: absolute;
   top: 0; left: 0;
@@ -1270,13 +1272,13 @@
   pointer-events: none;
   z-index: 7;
   background: var(--c-cream);
-  /* clip-path inset que recolhe da borda pra dentro conforme --mp cresce
-     mp=0 → inset(0%) = mostra TUDO (creme cobre toda tela)
-     mp=1 → inset(50%) = recolhe pra nada (overlay sumiu, cena visível) */
   clip-path: inset(calc(50% * var(--mp)) calc(50% * var(--mp)) round calc(2% + var(--mp) * 48%));
-  opacity: calc(1 - var(--mp) * .9);
-  transition: clip-path .12s linear, opacity .15s linear;
+  opacity: 0;
+  transition: clip-path .12s linear, opacity .4s var(--ease-out);
   will-change: clip-path, opacity;
+}
+.zoom-in.is-entering .zoom-in__mask-reveal {
+  opacity: calc(1 - var(--mp) * .9);
 }
 .zoom-in__mask-reveal svg { display: none; }
 .zoom-in__stage {
@@ -1781,11 +1783,13 @@
   opacity: 0;
 }
 
-/* Contato — esquerda inferior, "chegou" */
+/* Contato — esquerda inferior afastada do conteúdo */
 .bag-companion.bag-state-contato {
-  left: 4vw;
-  right: auto;
-  bottom: 6vh;
+  left: auto;
+  right: 1.5vw;
+  bottom: 14vh;
+  width: 70px;
+  height: 100px;
 }
 
 /* Footer — sumindo embora */
