@@ -224,32 +224,16 @@
             <text class="morph-label" x="200" y="365">Granulado · extrusão</text>
           </g>
 
-          <!-- STAGE 3: Bag (sacola pronta) -->
+          <!-- STAGE 3: Sacola Qualità REAL (PNG) -->
           <g class="morph-stage" data-step="3">
-            <!-- Bag body -->
-            <path class="morph-shape morph-draw morph-fill" d="M 125 130
-              L 125 320
-              Q 125 335 140 335
-              L 260 335
-              Q 275 335 275 320
-              L 275 130 Z"/>
-            <!-- Bag handles -->
-            <path class="morph-shape morph-draw" d="M 155 130
-              L 155 90 Q 155 75 170 75
-              L 190 75 Q 200 75 200 90
-              L 200 130"/>
-            <path class="morph-shape morph-draw" d="M 200 130
-              L 200 90 Q 200 75 210 75
-              L 230 75 Q 245 75 245 90
-              L 245 130"/>
-            <!-- Brand mark recycle on the bag -->
-            <circle class="morph-shape" cx="200" cy="220" r="42" opacity=".5"/>
-            <path class="morph-shape" d="M 200 200 L 188 218 L 195 218 M 188 218 L 175 240"
-              opacity=".7"/>
-            <path class="morph-shape" d="M 200 200 L 212 218 L 205 218 M 212 218 L 225 240"
-              opacity=".7"/>
-            <path class="morph-shape" d="M 175 250 L 225 250" opacity=".7"/>
-            <text class="morph-label" x="200" y="385">Embalagem pronta</text>
+            <!-- Halo dourado por trás pra dar destaque cinematográfico -->
+            <ellipse class="morph-halo" cx="200" cy="220" rx="130" ry="170"
+                     fill="rgba(232,185,49,.16)" filter="blur(8px)"/>
+            <!-- A sacola real -->
+            <image class="morph-bag-real" href="assets/sacola-mascote.png"
+                   x="80" y="55" width="240" height="320"
+                   preserveAspectRatio="xMidYMid meet"/>
+            <text class="morph-label" x="200" y="395">Embalagem Qualità · pronta</text>
           </g>
         </svg>
       `;
