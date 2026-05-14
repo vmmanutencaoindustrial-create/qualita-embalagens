@@ -522,6 +522,51 @@
   </div>
 </section>
 
+<!-- ===== ECOSSISTEMA — Constelação 3D Three.js ===== -->
+<section class="ecosystem" id="ecosystem" aria-label="Ecossistema Qualità">
+  <div class="ecosystem__head">
+    <span class="section-eyebrow">Ecossistema</span>
+    <h2 class="ecosystem__title">
+      Tudo orbita em torno<br>
+      <em>de uma mesma matéria.</em>
+    </h2>
+    <p class="ecosystem__lead">Quatro linhas industriais, uma origem comum: resíduo plástico pós-consumo. A cada produto, o mesmo princípio se transforma — só a aplicação muda.</p>
+  </div>
+
+  <div class="ecosystem__stage">
+    <canvas class="ecosystem__canvas" id="ecosystem3d"></canvas>
+
+    <!-- Labels HTML sincronizados com posições 3D dos nós -->
+    <div class="ecosystem__labels">
+      <div class="ecosystem__label" data-node="0">
+        <span class="ecosystem__label-num">01</span>
+        <strong>Sacolas Camiseta</strong>
+        <small>Linha varejo · 30×40 a 50×60</small>
+      </div>
+      <div class="ecosystem__label" data-node="1">
+        <span class="ecosystem__label-num">02</span>
+        <strong>Reforçadas</strong>
+        <small>Linha pesada · cargas pesadas</small>
+      </div>
+      <div class="ecosystem__label" data-node="2">
+        <span class="ecosystem__label-num">03</span>
+        <strong>Personalizadas</strong>
+        <small>Branded · flexo 6 cores</small>
+      </div>
+      <div class="ecosystem__label" data-node="3">
+        <span class="ecosystem__label-num">04</span>
+        <strong>Bobinas</strong>
+        <small>Linha técnica · hortifruti</small>
+      </div>
+    </div>
+
+    <div class="ecosystem__center-info">
+      <span class="ecosystem__pulse"></span>
+      <span class="ecosystem__center-text">100% pós-consumo</span>
+    </div>
+  </div>
+</section>
+
 <!-- ===== DECRETO 2026 (URGÊNCIA REGULATÓRIA) ===== -->
 <section class="decree" id="decreto">
   <div class="decree__bg" aria-hidden="true"></div>
@@ -865,5 +910,6 @@
 <script src="script.js"></script>
 <script src="premium.js"></script>
 <script type="module" src="hero-3d.js"></script>
+<script type="module" src="ecosystem-3d.js"></script>
 </body>
 </html>
