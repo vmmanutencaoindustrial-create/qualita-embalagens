@@ -424,6 +424,48 @@
     io.observe(timeline);
   }
 
+  /* ============== QUOTE — char split + reveal stagger ============== */
+  const quoteEl = document.querySelector('.quote blockquote');
+  if (quoteEl) {
+    // wrap each word in a span containing chars
+    const html = quoteEl.innerHTML;
+    // Walk text nodes only — preserve <em> tags
+    function processNode(node) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const text = node.textContent;
+        const frag = document.createDocumentFragment();
+        [...text].forEach((c, i) => {
+          if (c === ' ') {
+            frag.appendChild(document.createTextNode(' '));
+          } else {
+            const span = document.createElement('span');
+            span.className = 'quote-char';
+            span.textContent = c;
+            span.style.transitionDelay = (Math.random() * 0.6) + 's';
+            frag.appendChild(span);
+          }
+        });
+        node.replaceWith(frag);
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        [...node.childNodes].forEach(processNode);
+      }
+    }
+    [...quoteEl.childNodes].forEach(processNode);
+
+    const quoteSec = quoteEl.closest('.quote');
+    if (quoteSec) {
+      const qio = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            quoteSec.classList.add('is-in');
+            qio.disconnect();
+          }
+        });
+      }, { threshold: 0.3 });
+      qio.observe(quoteSec);
+    }
+  }
+
   /* ============== BAG COMPANION (mascote percorre o site) ============== */
   const bag = document.getElementById('bagCompanion');
   if (bag) {
@@ -560,6 +602,43 @@
     }, 1600);
   }
 
+  /* ============== HERO STATS — COUNT-UP + TYPEWRITER ============== */
+  function countUp(el, target, suffix, duration = 1400) {
+    const start = performance.now();
+    function tick(now) {
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      const value = Math.floor(target * eased);
+      el.textContent = value + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+      else el.textContent = target + suffix;
+    }
+    requestAnimationFrame(tick);
+  }
+  function typewriter(el, target, perCharMs = 110) {
+    el.textContent = '';
+    let i = 0;
+    function step() {
+      el.textContent = target.slice(0, ++i);
+      if (i < target.length) setTimeout(step, perCharMs);
+    }
+    setTimeout(step, 120);
+  }
+  const heroStatsIo = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        if (el.dataset.countUp) {
+          countUp(el, parseFloat(el.dataset.countUp), el.dataset.suffix || '');
+        } else if (el.dataset.typewriter) {
+          typewriter(el, el.dataset.typewriter);
+        }
+        heroStatsIo.unobserve(el);
+      }
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('[data-count-up], [data-typewriter]').forEach(el => heroStatsIo.observe(el));
+
   /* ============== ZOOM-IN CINEMATOGRAFICO ============== */
   const zoomSec = document.getElementById('zoom-in');
   if (zoomSec && !reduced) {
@@ -568,13 +647,15 @@
       const r = zoomSec.getBoundingClientRect();
       const total = zoomSec.offsetHeight - window.innerHeight;
       if (total <= 0) return;
-      // progress 0 quando topo da seção está na viewport top; 1 quando bottom alinha com bottom da viewport
       const p = Math.min(Math.max(-r.top / total, 0), 1);
-      // shape: linger no início + final, acelera no meio (ease)
       const eased = p < 0.5
         ? 2 * p * p
         : 1 - Math.pow(-2 * p + 2, 2) / 2;
       zoomSec.style.setProperty('--zp', eased.toFixed(4));
+      // --mp: máscara de entrada, 0→1 nos primeiros 12% do scroll da seção
+      const mp = Math.min(p / 0.12, 1);
+      const mpEased = 1 - Math.pow(1 - mp, 3); // ease-out cubic
+      zoomSec.style.setProperty('--mp', mpEased.toFixed(4));
       raf = null;
     }
     window.addEventListener('scroll', () => {

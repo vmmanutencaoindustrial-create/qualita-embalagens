@@ -69,6 +69,49 @@
   html { cursor: auto !important; }
 }
 
+/* ============== HERO MESH GRADIENT ============== */
+.hero {
+  isolation: isolate;
+}
+.hero__mesh {
+  position: absolute;
+  inset: -10%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(232,185,49,.35), transparent 45%),
+    radial-gradient(circle at 80% 20%, rgba(90,138,111,.40), transparent 50%),
+    radial-gradient(circle at 70% 80%, rgba(184,132,30,.30), transparent 45%),
+    radial-gradient(circle at 25% 75%, rgba(42,82,56,.45), transparent 50%);
+  filter: blur(40px);
+  mix-blend-mode: overlay;
+  opacity: .9;
+  animation: meshDrift 18s ease-in-out infinite alternate;
+  will-change: transform, filter;
+}
+@keyframes meshDrift {
+  0%   { transform: translate3d(0, 0, 0) scale(1)    rotate(0deg); }
+  33%  { transform: translate3d(2%, -1%, 0) scale(1.05) rotate(2deg); }
+  66%  { transform: translate3d(-2%, 1%, 0) scale(.98) rotate(-2deg); }
+  100% { transform: translate3d(1%, 1%, 0) scale(1.02) rotate(1deg); }
+}
+.hero__mesh--accent {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 100%, rgba(232,185,49,.25), transparent 70%),
+    radial-gradient(ellipse 50% 30% at 90% 0%, rgba(196,217,200,.18), transparent 70%);
+  mix-blend-mode: screen;
+  opacity: .85;
+  animation: meshDrift 22s ease-in-out infinite alternate-reverse;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__mesh, .hero__mesh--accent { animation: none; }
+}
+
 /* ============== MOUSE PARALLAX HERO ============== */
 .hero { --mx: 0; --my: 0; }
 .hero__media img {
@@ -403,6 +446,48 @@
   font-variation-settings: 'opsz' 64, 'wght' 700;
 }
 
+/* =====================================================================
+   QUOTE SECTION — vida (mesh gradient + char split + animated quote mark)
+   ===================================================================== */
+.quote {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.quote::before {
+  content: '';
+  position: absolute;
+  inset: -10%;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 40% 30% at 25% 30%, rgba(232,185,49,.22), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 75% 70%, rgba(90,138,111,.18), transparent 65%),
+    radial-gradient(ellipse 30% 50% at 50% 50%, rgba(196,217,200,.15), transparent 60%);
+  filter: blur(40px);
+  animation: meshDrift 22s ease-in-out infinite alternate;
+  opacity: .85;
+}
+.quote__mark {
+  transform-origin: center;
+  animation: quoteFloat 5s ease-in-out infinite;
+}
+@keyframes quoteFloat {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50%      { transform: translateY(-6px) rotate(2deg); }
+}
+.quote blockquote {
+  position: relative;
+}
+.quote-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(40%) rotateX(-30deg);
+  transform-origin: 50% 100%;
+  transition: opacity .9s var(--ease-out), transform 1s var(--ease-out);
+  will-change: transform;
+}
+.quote.is-in .quote-char { opacity: 1; transform: translateY(0) rotateX(0); }
+
 /* ============== STATS — INCREASE HOVER PRESENCE ============== */
 .stats__item {
   cursor: pointer;
@@ -527,11 +612,31 @@
    ===================================================================== */
 .zoom-in {
   --zp: 0;             /* progresso da seção: 0 → 1 */
+  --mp: 0;             /* progresso da máscara de entrada: 0 → 1 */
   position: relative;
   height: 220vh;        /* seção alta pra scroll dramático */
   background: linear-gradient(180deg, var(--c-cream) 0%, #0F1F15 30%, #050B07 100%);
   color: var(--c-cream);
 }
+
+/* MASK REVEAL — overlay creme cobre o stage no início e abre revelando a cena
+   via clip-path inverso: começa cheio, vai sumindo de fora pra dentro */
+.zoom-in__mask-reveal {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100vh;
+  pointer-events: none;
+  z-index: 7;
+  background: var(--c-cream);
+  /* clip-path inset que recolhe da borda pra dentro conforme --mp cresce
+     mp=0 → inset(0%) = mostra TUDO (creme cobre toda tela)
+     mp=1 → inset(50%) = recolhe pra nada (overlay sumiu, cena visível) */
+  clip-path: inset(calc(50% * var(--mp)) calc(50% * var(--mp)) round calc(2% + var(--mp) * 48%));
+  opacity: calc(1 - var(--mp) * .9);
+  transition: clip-path .12s linear, opacity .15s linear;
+  will-change: clip-path, opacity;
+}
+.zoom-in__mask-reveal svg { display: none; }
 .zoom-in__stage {
   position: sticky;
   top: 0;

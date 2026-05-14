@@ -135,6 +135,8 @@
 <section class="hero" id="hero">
   <div class="hero__media">
     <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=1400&q=72" alt="Resíduo plástico colorido em processo de triagem industrial" loading="eager" />
+    <div class="hero__mesh" aria-hidden="true"></div>
+    <div class="hero__mesh--accent" aria-hidden="true"></div>
     <div class="hero__grain"></div>
     <div class="hero__overlay"></div>
   </div>
@@ -169,10 +171,10 @@
 
   <div class="hero__bottom">
     <div class="hero__stats">
-      <div><strong>100%</strong><small>matéria-prima reciclada</small></div>
-      <div><strong>4 linhas</strong><small>de produto industrial</small></div>
-      <div><strong>Brasil</strong><small>cobertura nacional</small></div>
-      <div><strong>B2B</strong><small>atacado dedicado</small></div>
+      <div><strong data-count-up="100" data-suffix="%">0%</strong><small>matéria-prima reciclada</small></div>
+      <div><strong data-count-up="4" data-suffix=" linhas">0 linhas</strong><small>de produto industrial</small></div>
+      <div><strong data-typewriter="Brasil">​</strong><small>cobertura nacional</small></div>
+      <div><strong data-typewriter="B2B">​</strong><small>atacado dedicado</small></div>
     </div>
     <a href="#manifesto" class="hero__scroll" aria-label="Rolar">
       <span>Role</span>
@@ -234,6 +236,31 @@
 
 <!-- ===== ZOOM-IN CINEMATOGRÁFICO — Por dentro da sacola ===== -->
 <section class="zoom-in" id="zoom-in" aria-label="Por dentro da sacola Qualità">
+  <!-- Mask reveal de entrada — sacola SVG cresce e revela a cena -->
+  <div class="zoom-in__mask-reveal" aria-hidden="true">
+    <svg viewBox="0 0 100 140" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <clipPath id="bagMask" clipPathUnits="userSpaceOnUse">
+          <!-- Path da sacola camiseta (alças + corpo) -->
+          <path d="M 32 42
+            L 32 22 Q 32 14 40 14 L 44 14 Q 50 14 50 22 L 50 42
+            M 50 42
+            L 50 22 Q 50 14 56 14 L 60 14 Q 68 14 68 22 L 68 42
+            M 22 42
+            L 78 42
+            Q 84 42 84 48
+            L 84 124
+            Q 84 132 76 132
+            L 24 132
+            Q 16 132 16 124
+            L 16 48
+            Q 16 42 22 42 Z"/>
+        </clipPath>
+      </defs>
+      <rect class="zoom-in__mask-bg" x="0" y="0" width="100" height="140" fill="#0F1F15"/>
+    </svg>
+  </div>
+
   <div class="zoom-in__stage">
     <div class="zoom-in__grain" aria-hidden="true"></div>
 
